@@ -30,8 +30,9 @@ rendu. Une empreinte d'aperçu modifiée invalide l'acceptation. Après accord,
 l'opérateur fournit les fichiers et la trace du message à la tâche complète.
 Réutiliser les voix en cache. La publication Metricool reste distincte.
 
-Le MCP actuel n'a pas de commande d'approbation ni d'état `awaiting_approval`.
-Cette version ajoute une consigne aux agents, pas une garantie du runtime.
-L'opérateur gère la tâche d'aperçu isolée et la reprise ; un arrêt apparaît
-actuellement comme `blocked`. Les tests de paquet ne prouvent pas le respect
-des consignes par un modèle. Un vrai essai avec une référence reste nécessaire.
+Le runtime 0.2.0 doit ?tre d?ploy? avec ces skills : il expose les outils
+get_video_preview, approve_video_preview et request_video_revision. La validation
+est persist?e dans le job et v?rifi?e avant commande de composition compl?te.
+La cr?ation d'un film se suspend automatiquement en awaiting_approval.
+Le contr?le statique du paquet ne prouve pas la qualit? artistique : un vrai
+aper?u avec r?f?rence et ?coute reste n?cessaire.

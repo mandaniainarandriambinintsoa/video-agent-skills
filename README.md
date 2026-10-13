@@ -1,4 +1,4 @@
-﻿# Manda video agent skills
+# Manda video agent skills
 
 Adaptation pour Codex sur le VPS Manda : références, aperçu de cinq secondes,
 production HyperFrames, voix Orus fournie par le service existant, contrôle
@@ -27,14 +27,17 @@ Le script ne contacte aucun service et n'exécute aucun fichier upstream.
 Il vérifie l'allowlist et les liens locaux, construit une archive avec manifeste
 SHA-256 et copie la licence MIT. [Installation opérateur](manda/OPERATIONS.md).
 
-## Limites
+## Validation depuis Work
 
-L'aperçu et l'acceptation sont des consignes aux agents. Le MCP existant n'a
-pas encore de commande dédiée d'approbation : l'opérateur prépare l'aperçu
-séparément et transmet l'accord à la tâche complète. Un job complet sans
-acceptation doit s'arrêter (`blocked`). Ce paquet ne modifie pas le runtime.
-Aucune référence vidéo n'est embarquée. La qualité doit être démontrée par un
-vrai essai et acceptée par Manda, pas par un score auto-attribué.
+Le runtime MCP 0.2.0 fournit `get_video_preview`, `approve_video_preview` et
+`request_video_revision`. Il attend en `awaiting_approval`, puis poursuit apr?s
+un accord sur l'empreinte exacte. L'orchestrateur contr?le cette transition en
+code ; les agents ne peuvent pas remplacer l'accord par leur propre rapport.
+Les appels r?p?t?s sont d?dupliqu?s par actionId. Les attentes survivent aux
+red?marrages ; les op?rations externes interrompues restent ? r?concilier.
+
+Aucune r?f?rence vid?o n'est embarqu?e. La qualit? doit ?tre d?montr?e par un
+vrai essai et accept?e par Manda, pas par un score auto-attribu?.
 
 ## Origine
 

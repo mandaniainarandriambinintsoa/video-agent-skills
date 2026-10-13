@@ -41,18 +41,28 @@ render/pass. Do not treat a generic authorization to install skills or start
 work as creative approval. Rejection yields timestamped changes and a revised
 preview, not an automatically approved new style. Preserve previous evidence.
 
-## Current runtime integration
+## Runtime integration (MCP 0.2.0)
 
-The existing MCP has create/status/delivery tools; it does not implement a
-dedicated preview-approval endpoint or an awaiting-approval state. This release
-adds an instruction-level gate, not a security boundary in the runtime.
-For a new style, run reference/preview work as an isolated control-plane task
-first. An existing full-film task lacking approval must stop with
-`qa/creative-gate.json` (reason, missing evidence, next action), not attempt a
-full render. Its current generic blocked status needs operator interpretation.
-The operator carries approved artifacts into the full-film worktree and resumes
-the same task only after reconciliation. Do not ask users to invent checkpoints,
-alter protected job state, or repeatedly create new jobs to bypass a block.
+The runtime automatically creates a representative preview in `preview-N/`,
+checks it, freezes it, and uploads a private PREVIEW file to Drive. Its durable
+state becomes `awaiting_approval`. The creator never writes approval itself.
 
-A preview may be delivered separately as a clearly labelled review artifact by
-the operator. It is never represented as a finished or publishable film.
+ChatGPT Work reads `get_video_preview` and shows the link to the user. After
+explicit acceptance, it calls `approve_video_preview` with jobId, unique actionId,
+exact previewSha256 and userConfirmed=true. Corrections use
+`request_video_revision` with the same jobId, current hash, a unique actionId
+and feedback. Repeat the SAME actionId and input after a network timeout.
+A new preview invalidates the previous acceptance. Neither tool publishes.
+
+The runtime owns `creative-approval.json`, derived from protected job state.
+It verifies frozen preview and style hashes before queuing/composing the full
+film and again before final upload. Approval/revision commands are serialized.
+Only awaiting approval accepts a new decision. Retries return the existing job.
+
+Waiting and queued decisions survive restart. An interrupted external call or
+render remains blocked for reconciliation: never blindly retry a paid request
+or task creation. Historical completed videos stay readable without approval.
+
+This gate prevents the orchestrator from commissioning full production without
+an approval command. It relies on authenticated ChatGPT Work to obtain the actual
+human response; a boolean argument is not an independent human-identity proof.
